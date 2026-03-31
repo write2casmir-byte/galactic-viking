@@ -131,16 +131,56 @@ function App() {
   });
 
   // App State - Load from persistence
+  const defaultBooks = [
+    {
+      id: 1001, title: 'Diary of a Wimpy Kid', author: 'Jeff Kinney',
+      review: 'Super funny! Greg is hilarious and the drawings make it even better.',
+      coverUrl: 'https://covers.openlibrary.org/b/id/8739161-M.jpg',
+      recommender: 'Booker', available: true, thumbsUp: 18
+    },
+    {
+      id: 1002, title: 'Dog Man', author: 'Dav Pilkey',
+      review: 'A cop and a dog become one superhero. The comics are amazing!',
+      coverUrl: 'https://covers.openlibrary.org/b/id/8091016-M.jpg',
+      recommender: 'Booker', available: true, thumbsUp: 15
+    },
+    {
+      id: 1003, title: 'The Lightning Thief', author: 'Rick Riordan',
+      review: 'Percy Jackson discovers he is a demigod. Best adventure series ever!',
+      coverUrl: 'https://covers.openlibrary.org/b/id/12547187-M.jpg',
+      recommender: 'Booker', available: true, thumbsUp: 20
+    },
+    {
+      id: 1004, title: 'Spy School', author: 'Stuart Gibbs',
+      review: 'A kid gets recruited to spy school. Full of action and plot twists!',
+      coverUrl: 'https://covers.openlibrary.org/b/id/8554130-M.jpg',
+      recommender: 'Booker', available: true, thumbsUp: 14
+    },
+    {
+      id: 1005, title: 'Wings of Fire: The Dragonet Prophecy', author: 'Tui T. Sutherland',
+      review: 'Dragons with their own tribes and a prophecy to fulfill. So epic!',
+      coverUrl: 'https://covers.openlibrary.org/b/id/7895280-M.jpg',
+      recommender: 'Booker', available: true, thumbsUp: 16
+    },
+    {
+      id: 1006, title: 'Big Nate: In a Class by Himself', author: 'Lincoln Peirce',
+      review: 'Nate is the funniest kid in school. The comics crack me up every time.',
+      coverUrl: 'https://covers.openlibrary.org/b/id/8236041-M.jpg',
+      recommender: 'Booker', available: true, thumbsUp: 12
+    }
+  ];
+
   const [books, setBooks] = useState(() => {
     const saved = localStorage.getItem('bw_books');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        return parsed.length > 0 ? parsed : defaultBooks;
       } catch (e) {
-        return [];
+        return defaultBooks;
       }
     }
-    return [];
+    return defaultBooks;
   });
 
   const [notifications, setNotifications] = useState(() => {
