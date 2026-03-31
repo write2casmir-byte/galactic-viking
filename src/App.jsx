@@ -1107,12 +1107,15 @@ function App() {
 
             <div style={{ marginBottom: '15px', textAlign: 'left' }}>
               <label style={{ fontSize: '13px', color: '#555', marginBottom: '5px', display: 'block' }}>Book Title</label>
-              <input
-                type="text"
+              <AutocompleteInput
                 placeholder="Full Title"
                 value={newBookTitle}
-                onChange={(e) => setNewBookTitle(e.target.value)}
-                required
+                onChange={(val) => setNewBookTitle(val)}
+                onSelect={(s) => {
+                  setNewBookTitle(s.title);
+                  setNewBookAuthor(s.author);
+                }}
+                required={true}
                 style={{ marginBottom: '0' }}
               />
             </div>
