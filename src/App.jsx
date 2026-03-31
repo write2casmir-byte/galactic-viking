@@ -34,14 +34,14 @@ const AutocompleteInput = ({ value, onChange, placeholder, onSelect, style, name
     const fetchSuggestions = async () => {
       try {
         const res = await fetch(
-          `https://openlibrary.org/search.json?title=${encodeURIComponent(value)}&limit=5&fields=title,author_name,key`,
+          `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(value)}&maxResults=5`,
           { signal: abortController.signal }
         );
         const data = await res.json();
-        const docs = data.docs.map(doc => ({
-          title: doc.title,
-          author: doc.author_name ? doc.author_name[0] : 'Unknown Author',
-          key: doc.key
+        const docs = (data.items || []).map(item => ({
+          title: item.volumeInfo?.title || 'Unknown Title',
+          author: (item.volumeInfo?.authors && item.volumeInfo?.authors.length > 0) ? item.volumeInfo.authors[0] : 'Unknown Author',
+          key: item.id
         }));
         suggestionCache.set(cacheKey, docs);
         setLocalSuggestions(docs);
