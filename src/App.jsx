@@ -119,6 +119,7 @@ function App() {
   const [isTyping, setIsTyping] = useState(false);
   const [showTopRankings, setShowTopRankings] = useState(false);
   const [newBookReview, setNewBookReview] = useState('');
+  const [newBookRecommender, setNewBookRecommender] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
 
   // User database state
@@ -581,7 +582,7 @@ function App() {
       author,
       review,
       coverUrl: realCoverUrl,
-      recommender: currentUser,
+      recommender: newBookRecommender || 'Anonymous',
       available: true,
       thumbsUp: Math.floor(Math.random() * 20) + 1 // mock initial popularity
     };
@@ -590,6 +591,7 @@ function App() {
     setNewBookTitle('');
     setNewBookAuthor('');
     setNewBookReview('');
+    setNewBookRecommender('');
     setIsAddingBook(false);
     setCurrentView('home');
   };
@@ -1155,6 +1157,18 @@ function App() {
               />
             </div>
 
+            <div style={{ marginBottom: '25px', textAlign: 'left' }}>
+              <label style={{ fontSize: '13px', color: '#555', marginBottom: '5px', display: 'block' }}>Your Name</label>
+              <input
+                type="text"
+                placeholder="Who is recommending this?"
+                value={newBookRecommender}
+                onChange={(e) => setNewBookRecommender(e.target.value)}
+                required
+                style={{ marginBottom: '0' }}
+              />
+            </div>
+
             <button type="submit" className="btn-primary" disabled={isAddingBook}>
               {isAddingBook ? 'Searching for Book Cover...' : 'Add Recommendation'}
             </button>
@@ -1167,6 +1181,7 @@ function App() {
                 setNewBookTitle('');
                 setNewBookAuthor('');
                 setNewBookReview('');
+                setNewBookRecommender('');
               }}
             >
               Cancel
