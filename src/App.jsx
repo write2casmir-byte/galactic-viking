@@ -13,6 +13,7 @@ const AutocompleteInput = ({ value, onChange, placeholder, onSelect, style, name
   useEffect(() => {
     if (value.length < 2) {
       setLocalSuggestions([]);
+      setLocalIsTyping(false);
       return;
     }
 
@@ -21,16 +22,19 @@ const AutocompleteInput = ({ value, onChange, placeholder, onSelect, style, name
     // Instant cache hit — no network needed
     if (suggestionCache.has(cacheKey)) {
       setLocalSuggestions(suggestionCache.get(cacheKey));
+      setLocalIsTyping(false);
       return;
     }
+
+    // Instantly show loading state while waiting for debounce/network
+    setLocalIsTyping(true);
 
     const abortController = new AbortController();
 
     const fetchSuggestions = async () => {
-      setLocalIsTyping(true);
       try {
         const res = await fetch(
-          `https://openlibrary.org/search.json?q=${encodeURIComponent(value)}&limit=5&fields=title,author_name,key`,
+          `https://openlibrary.org/search.json?title=${encodeURIComponent(value)}&limit=5&fields=title,author_name,key`,
           { signal: abortController.signal }
         );
         const data = await res.json();
@@ -50,7 +54,7 @@ const AutocompleteInput = ({ value, onChange, placeholder, onSelect, style, name
       }
     };
 
-    const timeoutId = setTimeout(fetchSuggestions, 250);
+    const timeoutId = setTimeout(fetchSuggestions, 350);
 
     return () => {
       clearTimeout(timeoutId);
