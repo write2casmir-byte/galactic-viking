@@ -98,12 +98,10 @@ const AutocompleteInput = ({ value, onChange, placeholder, onSelect, style, name
 
 function App() {
   const [currentUser, setCurrentUser] = useState(() => {
-    return localStorage.getItem('bw_user') || null;
+    return localStorage.getItem('bw_user') || 'Booker';
   });
 
-  const [currentView, setCurrentView] = useState(() => {
-    return localStorage.getItem('bw_user') ? 'home' : 'auth';
-  });
+  const [currentView, setCurrentView] = useState('home');
 
   const [readingBook, setReadingBook] = useState(null);
 
@@ -171,13 +169,8 @@ function App() {
   useEffect(() => {
     if (currentUser) {
       localStorage.setItem('bw_user', currentUser);
-    } else {
-      localStorage.removeItem('bw_user');
-      if (currentView !== 'auth') {
-        setCurrentView('auth');
-      }
     }
-  }, [currentUser, currentView]);
+  }, [currentUser]);
 
   const handleDeleteAccount = () => {
     if (window.confirm("ARE YOU SURE? This will completely delete your account and all your data forever!")) {
@@ -626,15 +619,6 @@ function App() {
               </div>
             )}
           </div>
-          <button
-            className="btn-secondary"
-            style={{ padding: '8px 15px', color: '#ff4444', borderColor: '#ff4444', fontSize: '14px', width: 'auto' }}
-            onClick={() => {
-              setCurrentUser(null);
-            }}
-          >
-            Logout
-          </button>
         </div>
     </div>
   );
@@ -661,40 +645,7 @@ function App() {
   return (
     <div style={{ padding: '20px', width: '100%' }}>
 
-      {currentView === 'auth' && (
-        <div className="glass-panel" style={{ marginTop: '10vh', maxWidth: '400px', marginLeft: 'auto', marginRight: 'auto' }}>
-          <h1 className="text-theme-primary">Bookers</h1>
-          <h3 style={{ color: '#555', fontWeight: 'normal' }}>For 3rd-8th Graders</h3>
-
-          <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', marginTop: '30px' }}>
-            <button
-              style={{ background: authMode === 'login' ? 'var(--theme-secondary)' : 'transparent', color: 'white', border: '1px solid var(--theme-secondary)', borderRadius: '5px', padding: '8px' }}
-              onClick={() => setAuthMode('login')}
-            >Login</button>
-            <button
-              style={{ background: authMode === 'signup' ? 'var(--theme-primary)' : 'transparent', color: 'white', border: '1px solid var(--theme-primary)', borderRadius: '5px', padding: '8px' }}
-              onClick={() => setAuthMode('signup')}
-            >Sign Up</button>
-          </div>
-
-          <form onSubmit={handleLogin}>
-            {authMode === 'signup' && (
-              <input type="text" placeholder="Real Name (Username)" required />
-            )}
-            {authMode === 'login' && (
-              <input type="text" placeholder="Username / Name" required />
-            )}
-
-            <input type="password" placeholder="Password" required />
-
-            <button className={authMode === 'login' ? 'btn-secondary' : 'btn-primary'} type="submit">
-              {authMode === 'login' ? 'Access Library' : 'Join Bookers!'}
-            </button>
-          </form>
-        </div>
-      )}
-
-      {currentView !== 'auth' && <TopNav />}
+      <TopNav />
 
       {currentView === 'home' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
